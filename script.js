@@ -50,21 +50,19 @@ function view(url) {
 						modal.style.left = "0";
 						// 下でモーダルに追加してるためリセットする
 						modal.innerHTML = "";
-						let h3 = document.createElement("h3");
-						h3.innerHTML = e.target.innerHTML;
 						let div = document.createElement("div");
-						div.appendChild(h3);
 						div.id = "container";
-						div.innerHTML = data[cls][num-1]["質問"]
-							+ `<button onclick="
-								show_window.document.getElementById('body').innerHTML = '${data[cls][num-1]['答え']}';
-								">答え</button>`
-							+ data[cls][num-1]["答え"];
+						div.innerHTML = "<p style='color:#f00;'>"+ e.target.innerHTML +"</p><p id='question'>"+data[cls][num-1]["質問"].replace("\n","<br>") + "</p>"
+							+ `<button id='show_answer'>答え</button>`
+							+ "<p id='answer'>" +data[cls][num-1]["答え"].replace("\n","<br>") + "</p>";
 						div.style.fontSize = "2rem";
-
-						win_body.innerHTML = data[cls][num-1]["質問"];
+						win_body.innerHTML = data[cls][num-1]["質問"].replace("\n","<br>");
 						
 						modal.appendChild(div);
+
+						document.getElementById("show_answer").addEventListener("click",(e)=>{
+							show_window.document.getElementById("body").innerHTML = document.getElementById("answer").innerHTML;
+						})
 					})
 				})
 			}
@@ -73,9 +71,10 @@ function view(url) {
 				range.setAttribute("min","1");
 				range.setAttribute("max","10");
 				range.setAttribute("step","0.3");
-				range.setAttribute("value","2");
+				range.setAttribute("value","4");
 				range.id = "range";
 				body.appendChild(range);
+			show_window.document.getElementById("body").style.fontSize = "4rem";
 			document.getElementById("range").addEventListener("input",(e)=> {
 				show_window.document.getElementById("body").style.fontSize = e.target.value + "rem";
 			})
