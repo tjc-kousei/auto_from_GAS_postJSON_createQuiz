@@ -1,100 +1,85 @@
+let show_window = window.open("./show.html", "show_window")
+let modal = document.getElementById("modal");
+let data;
+
 //汎用化について　ヘッダーをkeyにするのが未完成
+if( getParam('url') ) {
+	view(getParam('url'));
+	document.getElementById("spreadsheet_id").remove();
+	document.getElementById("spreadsheet_submit").remove();
+}
+
+/**
+ * Get the URL parameter value
+ *
+ * @param  name {string} パラメータのキー文字列
+ * @return  url {url} 対象のURL文字列（任意）
+ */
+
+function getParam(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
+
 function view(url) {
 	const converse_to_JSON_API = "https://script.google.com/macros/s/AKfycbywkvE7kC7zNtCnSh-fZ_8-KIonle4wRx8eY7xYuF_uGlsxiv0N4FuGIv1jJAJVK9r_/exec";
 	fetch(converse_to_JSON_API + "?sheet_id=" +url)
 		.then(result => result.json())
 		.then((output) => {
-			result = "";
+			let body = document.getElementById("body");
+			data = output;
 	
 			for(const keys in output ) {
-				result += "<h2>" + keys.trim() + "</h2>";
-				result += "<div id='wrapper'>";
-				for(var n=0,key=output[keys];n<key.length;n++){
-					result += "<div class='wrap'>";
-					result += `<div id="${keys.trim()}${n+1}" class="quiz_num active_one active" onclick="showQuestion('${keys}',${n+1});">${keys} 問${n+1}</div>`;
-					result += `<div id="${keys.trim()}${n+1}Question" class="" onclick="showAnswer('${keys}',${n+1});"> ${key[n].Question} </div>`;
-					result += `<div id="${keys.trim()}${n+1}Answer" class=""> ${key[n].Answer} </div>`;
-					result += "</div>";
-				}
-				result += "</div>"
-			}
-			document.getElementById("output").innerHTML = result;
-			document.getElementById("log").innerHTML = "";
+				let h2 = document.createElement("h2");
+				h2.innerHTML = keys.trim();
+				body.appendChild(h2);
+				let wrapper = document.createElement("div");
+				wrapper.classList.add("wrapper");
 
-			document.getElementById("spreadsheet_id").remove();
-			document.getElementById("spreadsheet_submit").remove();
+				for(var n=0,key=output[keys.trim()];n<key.length;n++){
+					let btn = document.createElement("div");
+					btn.classList.add("btn");
+					btn.innerHTML = keys.trim() + (n+1);
+					wrapper.appendChild(btn);
+			}
+			body.appendChild(wrapper);
+			
+			let btn = document.querySelectorAll(".btn");
+			btn.forEach( (value) => {
+				let cls = value.innerHTML.replace(/\d/g,"");
+				let num = value.innerHTML.replace(cls,"");
+				value.addEventListener("click", (e)=> {
+					value.classList.add("check");
+					let win_body = show_window.document.getElementById("body");
+					modal.style.left = "0";
+					modal.innerHTML = "";
+					let div = document.createElement("div");
+					div.id = "container";
+					div.innerHTML = data[cls][num-1]["質問"]
+						+ `<button onclick="
+							show_window.document.getElementById('body').innerHTML = '${data[cls][num-1]['答え']}';
+							">答え</button>`
+						+ data[cls][num-1]["答え"];
+					div.style.fontSize = "2rem";
+
+					win_body.innerHTML = data[cls][num-1]["質問"];
+					
+					modal.appendChild(div);
+				})
+			})
+		}
 	}).catch(err => {
-		console.error("エラー内容"+err);
-		document.getElementById("log").innerHTML = "リンクが正しくないか権限がありません";
+		console.log("エラー内容"+err);
 	});
 }
-
-function showQuestion(key,index) {
-	const self = document.getElementById(key+index);
-	const question = document.getElementById(key+index+"Question");
-	const answer   = document.getElementById(key+index+"Answer");
-	
-	if( question.className.includes("active_two") ){
-		self.classList.toggle("active_one");
-		self.classList.toggle("active_two");
-		question.classList.toggle("active_two");
-		question.classList.toggle("active");
-	} else if( !question.className.includes("active_two") && !question.className.includes("active_three") ) {
-		self.classList.toggle("active_one");
-		self.classList.toggle("active_two");
-		question.classList.toggle("active");
-		question.classList.toggle("active_two");
-		disp_modal(self.innerHTML,question.innerHTML,answer.innerHTML);
-	} else if( question.className.includes("active_three") ) {
-		self.classList.toggle("active_three");
-		self.classList.toggle("active_one");
-		self.style.backgroundColor = "skyblue";
-		question.classList.toggle("active_three");
-		answer.classList.toggle("active_three");
-		
-		question.classList.toggle("active");
-		answer.classList.toggle("active");
-		
-		question.classList.toggle("unactive");
-		answer.classList.toggle("unactive");
+modal.addEventListener("click", (e)=> {
+	if(e.target.id == "modal") {
+		modal.style.left = "-100vw";
+		show_window.document.getElementById("body").innerHTML = "";
 	}
-}
-function showAnswer(key,index) {
-	const self = document.getElementById(key+index);
-	const question = document.getElementById(key+index+"Question");
-	const answer   = document.getElementById(key+index+"Answer");
-
-	if( question.className.includes("active_two") ) {
-		self.classList.toggle("active_two");
-		self.classList.toggle("active_three");
-		question.classList.toggle("active_two");
-		question.classList.toggle("active_three");
-		answer.classList.toggle("active_three");
-		answer.classList.toggle("active");
-	} else if( answer.className.includes("active_three") ) {
-		self.classList.toggle("active_three");
-		self.classList.toggle("active_two");
-		question.classList.toggle("active_three");
-		question.classList.toggle("active_two");
-		answer.classList.toggle("active_three");
-		answer.classList.toggle("active");
-	}
-}
-
-function disp_modal(self,question,answer) {
-	const modal_wrap = document.getElementById("modal_wrap");
-	const modal = document.getElementById("modal");
-
-	modal.innerHTML =
-		`
-			<p id="num_index">${self}</p>
-			<p id="question">${question}</p>
-			<p id="answer" style="color: red;">${answer}</p>
-		`;
-		
-	modal_wrap.onclick = (e) => {
-		if(e.target.id == "modal_wrap") modal_wrap.style.left = "-100%";
-	};
-	modal.onclick = () => { document.getElementById("answer").style.display = "block"; };
-	modal_wrap.style.left = "0";
-}
+})

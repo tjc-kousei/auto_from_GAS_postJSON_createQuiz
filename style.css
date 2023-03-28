@@ -1,91 +1,78 @@
 * {
-    margin: 0;
     padding: 0;
+    margin: 0;
+    box-sizing: border-box;
     text-align: center;
 }
 *::-webkit-scrollbar {
     display: none;
 }
-
-#modal_wrap {
+#modal {
     position: fixed;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(0,0,0,.8);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition-duration: .5s;
+    top: 0;
+    left: -100vw;
+    background-color: rgba(100,100,100,.9);
+    z-index: 2;
 }
-#modal {
-    width: 90%;
+#modal #container {
+    background-color: #fff;
+    width: 80%;
     height: 80%;
-    background-color: white;
+    margin: 10%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 
-h2{
+body {
+    width: 100vw;
+    height: 100vh;
+    background:
+        url("./background/2.jpg")
+        no-repeat
+        top left / cover
+        ;
+    z-index: 1;
+}
+
+h2 {
     font-size: 4rem;
-}
-.wrap * {
-    display: none;
-}
-.unactive {
-    display: none;
+    color: #fff;
 }
 
-.active {
-    display: table-cell;
+/* ボタンのスタイル */
+.wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    border-collapse: collapse;
 }
-
-.active_one {
-    width: 100%;
-}
-.active_two {
-    width: calc(100%/2);
-}
-.active_three {
-    width: calc(100%/3);
-}
-
-.active_one, .active_two, .active_three {
-    border: 1px solid rgba(0,0,0,.5);
-    min-height : 5rem;
-    font-size: 1.5rem;
+.wrapper .btn {
+    position: relative;
+    width: calc(100vw/15);
+    height: calc(100vw/15);
+    color: #fff;
+    border: #fff 2px solid;
+    padding: 10px 0;
     display: flex;
     justify-content: center;
     align-items: center;
 }
-.active_one:hover, .active_two:hover, .active_three:hover {
-    background-color: rgb(240,248,255);
-}
-
-#wrapper {
-    display: flex;
-    flex-direction: column;
-}
-.wrap {
-    display: flex;
-    flex-direction: row;
-}
-.quiz_num {
-    font-size: 3.5rem;
-    background-color: rgb(255,255,30);
-}
-
-#num_index {
-    border-bottom: 2px black solid;
-    font-size: 1.2rem;
-    background-color: yellow;
+.wrapper .btn:hover {
+    background-color: #fff;
     color: blue;
+    cursor: pointer;
 }
-#question {
-    font-size: 3rem;
-}
-#answer {
-    display: none;
-    font-size: 2rem;
+
+.check::before {
+    content: "✔︎";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(128,128,128,.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

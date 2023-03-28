@@ -7,14 +7,11 @@
     <title>Document</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body id="body">
     <input type="text" id="spreadsheet_id" style="width: 70%; height: 2rem; margin: 10% 0;" autocomplete="off" placeholder="Googleスプレッドシートのリンクを入力(共有で”リンクを知っている全員”権限が閲覧者より上位の権限であるリンク)">
-    <input type="button" id="spreadsheet_submit" value="表示" style="height: 2rem; width: 4rem;" onclick="view(document.getElementById('spreadsheet_id').value);">
-    <div id="modal_wrap" style="left: -100%;">
-        <div id="modal"></div>
-    </div>
-    <div id="output"></div>
-    <div id="log"></div>
+    <input type="button" id="spreadsheet_submit" value="表示" style="height: 2rem; width: 4rem;" onclick="view(document.getElementById('spreadsheet_id').value); this.remove(); document.getElementById('spreadsheet_id').remove();">
+    
+    <div id="modal"></div>
     <script src="script.js"></script>
 </body>
 </html>
