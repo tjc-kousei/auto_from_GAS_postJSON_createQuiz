@@ -79,3 +79,9 @@ h2 {
     justify-content: center;
     align-items: center;
 }
+input[type=range] {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    z-index: 3;
+}

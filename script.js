@@ -2,20 +2,11 @@ let show_window = window.open("./show.html", "show_window")
 let modal = document.getElementById("modal");
 let data;
 
-//汎用化について　ヘッダーをkeyにするのが未完成
 if( getParam('url') ) {
 	view(getParam('url'));
 	document.getElementById("spreadsheet_id").remove();
 	document.getElementById("spreadsheet_submit").remove();
 }
-
-/**
- * Get the URL parameter value
- *
- * @param  name {string} パラメータのキー文字列
- * @return  url {url} 対象のURL文字列（任意）
- */
-
 function getParam(name, url) {
     if (!url) url = window.location.href;
     name = name.replace(/[\[\]]/g, "\\$&");
@@ -46,34 +37,49 @@ function view(url) {
 					btn.classList.add("btn");
 					btn.innerHTML = keys.trim() + (n+1);
 					wrapper.appendChild(btn);
-			}
-			body.appendChild(wrapper);
-			
-			let btn = document.querySelectorAll(".btn");
-			btn.forEach( (value) => {
-				let cls = value.innerHTML.replace(/\d/g,"");
-				let num = value.innerHTML.replace(cls,"");
-				value.addEventListener("click", (e)=> {
-					value.classList.add("check");
-					let win_body = show_window.document.getElementById("body");
-					modal.style.left = "0";
-					modal.innerHTML = "";
-					let div = document.createElement("div");
-					div.id = "container";
-					div.innerHTML = data[cls][num-1]["質問"]
-						+ `<button onclick="
-							show_window.document.getElementById('body').innerHTML = '${data[cls][num-1]['答え']}';
-							">答え</button>`
-						+ data[cls][num-1]["答え"];
-					div.style.fontSize = "2rem";
+				}
+				body.appendChild(wrapper);
+				
+				let btn = document.querySelectorAll(".btn");
+				btn.forEach( (value) => {
+					let cls = value.innerHTML.replace(/\d/g,"");
+					let num = value.innerHTML.replace(cls,"");
+					value.addEventListener("click", (e)=> {
+						value.classList.add("check");
+						let win_body = show_window.document.getElementById("body");
+						modal.style.left = "0";
+						// 下でモーダルに追加してるためリセットする
+						modal.innerHTML = "";
+						let h3 = document.createElement("h3");
+						h3.innerHTML = e.target.innerHTML;
+						let div = document.createElement("div");
+						div.appendChild(h3);
+						div.id = "container";
+						div.innerHTML = data[cls][num-1]["質問"]
+							+ `<button onclick="
+								show_window.document.getElementById('body').innerHTML = '${data[cls][num-1]['答え']}';
+								">答え</button>`
+							+ data[cls][num-1]["答え"];
+						div.style.fontSize = "2rem";
 
-					win_body.innerHTML = data[cls][num-1]["質問"];
-					
-					modal.appendChild(div);
+						win_body.innerHTML = data[cls][num-1]["質問"];
+						
+						modal.appendChild(div);
+					})
 				})
+			}
+			let range = document.createElement("input");
+				range.setAttribute("type","range");
+				range.setAttribute("min","1");
+				range.setAttribute("max","10");
+				range.setAttribute("step","0.3");
+				range.setAttribute("value","2");
+				range.id = "range";
+				body.appendChild(range);
+			document.getElementById("range").addEventListener("input",(e)=> {
+				show_window.document.getElementById("body").style.fontSize = e.target.value + "rem";
 			})
-		}
-	}).catch(err => {
+		}).catch(err => {
 		console.log("エラー内容"+err);
 	});
 }
