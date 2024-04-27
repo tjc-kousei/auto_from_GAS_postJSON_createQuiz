@@ -23,7 +23,16 @@ function view(url) {
 		.then(result => result.json())
 		.then((output) => {
 			let body = document.getElementById("body");
-			data = output;
+			let data = output;
+
+			// Num型でも全てStringに変換する
+			let classes = Object.keys(output);
+			for( let n = 0; n < classes.length; n++ ) {
+				for( let i = 0; i < output[classes[n]].length; i++ ) {
+					data[classes[n]][i]["質問"] = output[classes[n]][i]["質問"].toString();
+					data[classes[n]][i]["答え"] = output[classes[n]][i]["答え"].toString();
+				}
+			}
 	
 			for(const keys in output ) {
 				let h2 = document.createElement("h2");
@@ -32,36 +41,39 @@ function view(url) {
 				let wrapper = document.createElement("div");
 				wrapper.classList.add("wrapper");
 
-				for(var n=0,key=output[keys.trim()];n<key.length;n++){
+				for( let n = 0, key = output[keys.trim()]; n <key.length; n++ ){
 					let btn = document.createElement("div");
 					btn.classList.add("btn");
 					btn.innerHTML = keys.trim() + (n+1);
+					btn.dataset.cls = keys.trim();
+					btn.dataset.num = (n+1);
 					wrapper.appendChild(btn);
 				}
 				body.appendChild(wrapper);
 				
 				let btn = document.querySelectorAll(".btn");
 				btn.forEach( (value) => {
-					let cls = value.innerHTML.replace(/\d/g,"");
-					let num = value.innerHTML.replace(cls,"");
+					let cls = value.dataset.cls;
+					let num = value.dataset.num;
 					value.addEventListener("click", (e)=> {
 						value.classList.add("check");
 						let win_body = show_window.document.getElementById("body");
+						modal.classList.toggle("open")
 						modal.style.left = "0";
 						// 下でモーダルに追加してるためリセットする
 						modal.innerHTML = "";
 						let div = document.createElement("div");
 						div.id = "container";
 						div.innerHTML = "<p style='color:#f00;'>"+ e.target.innerHTML +"</p><p id='question'>"+data[cls][num-1]["質問"].replace("\n","<br>") + "</p>"
-							+ `<button id='show_answer'>答え</button>`
-							+ "<p id='answer'>" +data[cls][num-1]["答え"].replace("\n","<br>") + "</p>";
+						+ `<button id='show_answer'>答え</button>`
+						+ "<p id='answer'>" +data[cls][num-1]["答え"].replace("\n","<br>") + "</p>";
 						div.style.fontSize = "2rem";
-						win_body.innerHTML = data[cls][num-1]["質問"].replace("\n","<br>");
+						win_body.innerHTML = data[cls][num-1]["質問"].replace(/[\n/]/g,"<br>");
 						
 						modal.appendChild(div);
 
 						document.getElementById("show_answer").addEventListener("click",(e)=>{
-							show_window.document.getElementById("body").innerHTML = document.getElementById("answer").innerHTML;
+							show_window.document.getElementById("body").innerHTML = (document.getElementById("answer").innerHTML).replace(/[\n/]/g,"<br>");
 						})
 					})
 				})
@@ -84,6 +96,7 @@ function view(url) {
 }
 modal.addEventListener("click", (e)=> {
 	if(e.target.id == "modal") {
+		modal.classList.toggle("open");
 		modal.style.left = "-100vw";
 		show_window.document.getElementById("body").innerHTML = "";
 	}

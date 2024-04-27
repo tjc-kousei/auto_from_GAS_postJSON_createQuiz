@@ -7,6 +7,11 @@
 *::-webkit-scrollbar {
     display: none;
 }
+
+body:has(div.open) {
+    /* overflow: hidden; */
+}
+
 #modal {
     position: fixed;
     width: 100vw;
@@ -36,9 +41,11 @@ body {
     background:
         url("./background/2.jpg")
         no-repeat
-        top left / cover
+        fixed
+        center
         ;
     z-index: 1;
+    overflow: scroll;
 }
 
 h2 {
@@ -54,8 +61,8 @@ h2 {
 }
 .wrapper .btn {
     position: relative;
-    width: calc(100vw/15);
-    height: calc(100vw/15);
+    width: 100px;
+    height: 100px;
     color: #fff;
     border: #fff 2px solid;
     padding: 10px 0;
