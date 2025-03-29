@@ -1,0 +1,106 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    text-align: center;
+}
+*::-webkit-scrollbar {
+    display: none;
+}
+
+body:has(div.open) {
+    /* overflow: hidden; */
+}
+
+#modal {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: -100vw;
+    background-color: rgba(100,100,100,.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+}
+#modal #container {
+    background-color: #fff;
+    width: 80%;
+    height: 80%;
+    margin: 10%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+body {
+    width: 100vw;
+    height: 100vh;
+    background:
+        url("../background/2.jpg")
+        no-repeat
+        fixed
+        center
+        ;
+    z-index: 1;
+    overflow: scroll;
+}
+
+h2 {
+    font-size: 4rem;
+    color: #fff;
+}
+
+/* ボタンのスタイル */
+.wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 10px;
+    max-width: 100%;
+}
+.wrapper .btn {
+    position: relative;
+    background: white;
+    padding: 15px;
+    width: 176px; /* 44 22 11 */
+    height: 112px;/* 28 14 7 */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.2s ease-in-out;
+}
+.wrapper .btn p {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+.wrapper .btn:hover {
+    background-color: #fff;
+    color: blue;
+    cursor: pointer;
+}
+
+.check::before {
+    content: "✔︎";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(128,128,128,.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+input[type=range] {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    z-index: 3;
+}
