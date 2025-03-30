@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>パワポ風クイズ生成</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body id="body">
+    <input type="text" id="spreadsheet_id" style="width: 70%; height: 2rem; margin: 10% 0;" autocomplete="off" placeholder="Googleスプレッドシートのリンクを入力(共有で”リンクを知っている全員”権限が閲覧者より上位の権限であるリンク)">
+    <input type="button" id="spreadsheet_submit" value="表示" style="height: 2rem; width: 4rem;" onclick="view(document.getElementById('spreadsheet_id').value); this.remove(); document.getElementById('spreadsheet_id').remove();">
+    
+    <div id="modal"></div>
+    <script src="script.js"></script>
+</body>
+</html>

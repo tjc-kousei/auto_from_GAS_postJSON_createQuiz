@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>クイズ表示</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      width: 100vw;
+      height: 100vh;
+      background: url("../background/2.jpg") no-repeat center center / cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: white;
+      font-family: "Arial", sans-serif;
+      padding: 2rem;
+    }
+
+    #body {
+      font-size: 4rem;
+      line-height: 1.5;
+      animation: fadeIn 1s ease-out;
+      white-space: pre-line;
+      max-width: 100%;
+      word-break: break-word;
+      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* アニメーション切り替え用クラス */
+    .fade {
+      animation: fadeIn 0.8s ease-in-out;
+    }
+  </style>
+</head>
+<body id="body">
+</body>
+</html>
